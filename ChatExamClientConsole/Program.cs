@@ -46,7 +46,6 @@ namespace ChatExamClientConsole
                 {
                     writer.WriteLine(ex.Message);
                 }
-                
             }
         }
 

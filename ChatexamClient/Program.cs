@@ -12,10 +12,9 @@ namespace ChatexamClient
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             Application.Run(new ChatexamClient.Form1());
-            ChatClient client = new ChatClient("127.0.0.1", 50000);
-            client.Start();
-
-            client.Close();
+            
+            Form1 form = new Form1();
+            Application.Run(form);
         }
     }
 }

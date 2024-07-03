@@ -1,16 +1,14 @@
 ﻿namespace ChatAppExam
 {
-    internal class User
+    class User
     {
-        private string username { get; set; }
-        private string password { get; set; }
-        private string email { get; set; }
-        private Dictionary<string, User> Contacts { get; set; }
-        User(string username, string password, string email)
+        public string username { get; set; }
+        public string password { get; set; }
+        public Dictionary<string, User> Contacts { get; set; }
+        public User(string username, string password)
         {
             this.username = username;
             this.password = password;
-            this.email = email;
             Contacts = new Dictionary<string, User>();
         }
     }
