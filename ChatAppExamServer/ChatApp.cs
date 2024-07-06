@@ -1,15 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.IO;
-using System.Net;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Sockets;
-using System.Reflection.PortableExecutable;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Xml.Serialization;
+using System.Threading.Tasks;
 
-namespace ChatAppExam
+namespace ChatAppExamServer
 {
-
     internal class ChatApp
     {
         private Socket listenerSocket;
@@ -42,9 +41,9 @@ namespace ChatAppExam
         {
             NetworkStream stream = new NetworkStream(clientSocket);
             StreamReader reader = new StreamReader(stream);
-            StreamWriter writer = new StreamWriter(stream) 
-            { 
-                AutoFlush = true 
+            StreamWriter writer = new StreamWriter(stream)
+            {
+                AutoFlush = true
             };
 
             writer.WriteLine("~~~ Welcome To The Chat ~~~");
@@ -92,7 +91,7 @@ namespace ChatAppExam
 
         public void HandleClient(StreamReader reader, StreamWriter writer, Socket clientSocket)
         {
-            writer.WriteLine("~~~ Welcome To The Chat ~~~\ntype \"register\" to register or \"login\" to log in");
+            writer.WriteLine("~~~ Welcome To The Chat ~~~ type \"register\" to register or \"login\" to log in");
 
             string response = reader.ReadLine();
 
@@ -139,9 +138,9 @@ namespace ChatAppExam
 
             while (!Valid)
             {
-                if(numberRegex.IsMatch(password) && upperRegex.IsMatch(password) && lowerRegex.IsMatch(password))
+                if (numberRegex.IsMatch(password) && upperRegex.IsMatch(password) && lowerRegex.IsMatch(password))
                 {
-                    writer.WriteLine("Success! You can now log in.");
+                    writer.WriteLine("Success! Press enter to return to the menu");
                     User user = new User(username, password);
                     users.Add(username, user);
                     Valid = true;
@@ -183,57 +182,78 @@ namespace ChatAppExam
 
         public void LoginUser(StreamReader reader, StreamWriter writer, Socket clientSocket)
         {
-            writer.WriteLine("Enter your username: ");
+            writer.WriteLine("Enter your username or enter \"stoplogin\" to exit to the menu:");
             string username = reader.ReadLine();
-            bool Valid = false;
+            bool valid = false;
 
-
-            while (!Valid)
+            while (!valid)
             {
-                if (!users.ContainsKey(username))
+                if (username == "stoplogin")
                 {
-                    writer.WriteLine("Username not found. Try again");
+                    writer.WriteLine("Returning to the main menu...");
+                    RegisterLoginGetResponse(reader, writer, clientSocket, string.Empty);
+                    return;
+                }
+                else if (!users.ContainsKey(username))
+                {
+                    writer.WriteLine("Username not found. Try again or enter \"stoplogin\" to exit to the menu:");
                     username = reader.ReadLine();
                 }
                 else
                 {
-                    Valid = true;
+                    valid = true;
                 }
             }
 
-            writer.WriteLine("Enter your password");
+            writer.WriteLine("Enter your password:");
             string password = reader.ReadLine();
-
             User user = users[username];
-            Valid = false;
+            valid = false;
 
-            while (!Valid)
+            while (!valid)
             {
-                if (user.password != password)
+                if (user.Password != password)
                 {
-                    writer.WriteLine("Wrong password. Enter 1 to try again or 2 to register");
-                    int choice = int.Parse(reader.ReadLine());
-                    if(choice == 1)
+                    writer.WriteLine("Wrong password. Enter 1 to try again or 2 to register:");
+                    string input = reader.ReadLine();
+                    int choice;
+
+                    if (int.TryParse(input, out choice))
                     {
-                        password = reader.ReadLine();
-                    }
-                    else if(choice == 2)
-                    {
-                        HandleClient(reader, writer, clientSocket);
+                        if (choice == 1)
+                        {
+                            writer.WriteLine("Enter your password:");
+                            password = reader.ReadLine();
+                        }
+                        else if (choice == 2)
+                        {
+                            RegisterUser(reader, writer, clientSocket);
+                            return;
+                        }
+                        else
+                        {
+                            writer.WriteLine("Invalid choice. Please enter 1 or 2:");
+                        }
                     }
                     else
                     {
-                        throw new ArgumentException("Too many wrong inputs");
+                        writer.WriteLine("Invalid input. Please enter a number (1 or 2):");
                     }
                 }
                 else
                 {
-                    Valid = true;
+                    valid = true;
                 }
             }
 
             writer.WriteLine("Login was successful!");
+            onlineUsers[username] = user;
+            UserSession(reader, writer, clientSocket, user);
+        }
 
+        public void UserSession(StreamReader reader, StreamWriter writer, Socket clientSocket, User user)
+        {
+            writer.WriteLine("user session started");
         }
     }
 }

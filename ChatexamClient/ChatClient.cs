@@ -9,6 +9,7 @@ namespace ChatexamClient
         private StreamReader reader;
         private StreamWriter writer;
         private Form1 form;
+        private Thread receiveThread;
         public ChatClient(string ip, int port, Form1 form)
         {
             this.form = form;
@@ -22,18 +23,45 @@ namespace ChatexamClient
             NetworkStream stream = new NetworkStream(clientSocket);
             reader = new StreamReader(stream);
             writer = new StreamWriter(stream) { AutoFlush = true };
+
+            receiveThread = new Thread(new ThreadStart(ReceiveMessages));
+            receiveThread.IsBackground = true;
+            receiveThread.Start();
         }
 
         public void Start()
         {
             form.UpdateChat(reader.ReadLine());
-
             form.UpdateChat(reader.ReadLine());
 
             while (true)
             {
                 string response = reader.ReadLine();
                 form.UpdateChat("Me: " + response);
+            }
+        }
+
+        private void ReceiveMessages()
+        {
+            try
+            {
+                while (true)
+                {
+                    UpdateChatFromReader();
+                }
+            }
+            catch (Exception ex)
+            {
+                form.Invoke(new Action(() => form.UpdateChat("Connection lost: " + ex.Message)));
+            }
+        }
+
+        private void UpdateChatFromReader()
+        {
+            string message = reader.ReadLine();
+            if (message != null)
+            {
+                form.Invoke(new Action(() => form.UpdateChat(message)));
             }
         }
 
@@ -44,6 +72,7 @@ namespace ChatexamClient
 
         public void Close()
         {
+            receiveThread?.Interrupt();
             writer.Close();
             reader.Close();
             clientSocket.Close();

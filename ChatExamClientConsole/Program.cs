@@ -8,6 +8,7 @@ namespace ChatExamClientConsole
         private Socket clientSocket;
         private StreamReader reader;
         private StreamWriter writer;
+        private Thread receiveThread;
 
         public ChatClient(string ip, int port)
         {
@@ -23,29 +24,53 @@ namespace ChatExamClientConsole
             {
                 AutoFlush = true
             };
+
+            receiveThread = new Thread(ReceiveMessages);
+            receiveThread.IsBackground = true;
+            receiveThread.Start();
         }
 
         public void Start()
         {
-            string serverResponse = reader.ReadLine();
-            Console.WriteLine(serverResponse);
-            serverResponse = reader.ReadLine();
-            Console.WriteLine(serverResponse);
-
-            while (true)
+            try
             {
-                Console.Write("> ");
-                string input = Console.ReadLine();
-                writer.WriteLine(input);
-                try
+                while (true)
                 {
-                    serverResponse = reader.ReadLine();
-                    Console.WriteLine(serverResponse);
+                    Console.Write("> ");
+                    string input = Console.ReadLine();
+                    writer.WriteLine(input);
+
+                    if (input.ToLower() == "exit")
+                    {
+                        break;
+                    }
                 }
-                catch(Exception ex)
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                Close();
+            }
+        }
+        private void ReceiveMessages()
+        {
+            try
+            {
+                while (true)
                 {
-                    writer.WriteLine(ex.Message);
+                    string serverResponse = reader.ReadLine();
+                    if (serverResponse != null)
+                    {
+                        Console.WriteLine(serverResponse);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
         }
 

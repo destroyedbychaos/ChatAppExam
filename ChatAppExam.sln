@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34723.18
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatAppExam", "ChatAppExam\ChatAppExam.csproj", "{5F80E798-85AF-4C51-988C-EB91B6B0E707}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatExamClientConsole", "ChatExamClientConsole\ChatExamClientConsole.csproj", "{A868D9F9-A191-4ACE-BDDA-3761AB1268D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatExamClientConsole", "ChatExamClientConsole\ChatExamClientConsole.csproj", "{A868D9F9-A191-4ACE-BDDA-3761AB1268D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatexamClient", "ChatexamClient\ChatexamClient.csproj", "{58636D36-12D3-4701-9DD7-DD164146B478}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatexamClient", "ChatexamClient\ChatexamClient.csproj", "{58636D36-12D3-4701-9DD7-DD164146B478}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatAppExamServer", "ChatAppExamServer\ChatAppExamServer.csproj", "{84EE6417-DACD-4FD9-A6D8-D3138439D601}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{5F80E798-85AF-4C51-988C-EB91B6B0E707}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5F80E798-85AF-4C51-988C-EB91B6B0E707}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5F80E798-85AF-4C51-988C-EB91B6B0E707}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5F80E798-85AF-4C51-988C-EB91B6B0E707}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A868D9F9-A191-4ACE-BDDA-3761AB1268D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A868D9F9-A191-4ACE-BDDA-3761AB1268D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A868D9F9-A191-4ACE-BDDA-3761AB1268D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -27,6 +23,10 @@ Global
 		{58636D36-12D3-4701-9DD7-DD164146B478}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58636D36-12D3-4701-9DD7-DD164146B478}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{58636D36-12D3-4701-9DD7-DD164146B478}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84EE6417-DACD-4FD9-A6D8-D3138439D601}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84EE6417-DACD-4FD9-A6D8-D3138439D601}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84EE6417-DACD-4FD9-A6D8-D3138439D601}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84EE6417-DACD-4FD9-A6D8-D3138439D601}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
