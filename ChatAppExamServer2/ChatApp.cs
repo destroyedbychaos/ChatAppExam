@@ -39,21 +39,46 @@ namespace ChatAppExamServer
 
         public void HandleClient(Socket clientSocket)
         {
-            NetworkStream stream = new NetworkStream(clientSocket);
-            StreamReader reader = new StreamReader(stream);
-            StreamWriter writer = new StreamWriter(stream)
+            try
             {
-                AutoFlush = true
-            };
+                using (NetworkStream stream = new NetworkStream(clientSocket))
+                using (StreamReader reader = new StreamReader(stream))
+                using (StreamWriter writer = new StreamWriter(stream) { AutoFlush = true })
+                {
+                    writer.WriteLine("~~~ Welcome To The Chat ~~~");
+                    writer.WriteLine("Type \"register\" to register or \"login\" to log in");
 
-            writer.WriteLine("~~~ Welcome To The Chat ~~~");
-            writer.WriteLine("type \"register\" to register or \"login\" to log in");
+                    RegisterLoginGetResponse(reader, writer, clientSocket);
+                }
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine($"Client disconnected: {ex.Message}");
+            }
+            catch (SocketException ex)
+            {
+                Console.WriteLine($"Socket error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected error: {ex.Message}");
+            }
+            finally
+            {
+                if (clientSocket.Connected)
+                {
+                    clientSocket.Close();
+                }
+            }
+        }
 
-            string response = reader.ReadLine();
+        public void HandleClient(StreamReader reader, StreamWriter writer, Socket clientSocket)
+        {
+            writer.WriteLine("~~~ Welcome To The Chat ~~~ type \"register\" to register or \"login\" to log in");;
 
             try
             {
-                RegisterLoginGetResponse(reader, writer, clientSocket, response);
+                RegisterLoginGetResponse(reader, writer, clientSocket);
             }
             catch (Exception ex)
             {
@@ -61,12 +86,16 @@ namespace ChatAppExamServer
             }
             finally
             {
-                stream.Close();
+                reader.Close();
+                writer.Close();
                 clientSocket.Close();
             }
         }
-        public void RegisterLoginGetResponse(StreamReader reader, StreamWriter writer, Socket clientSocket, string response)
+
+        public void RegisterLoginGetResponse(StreamReader reader, StreamWriter writer, Socket clientSocket)
         {
+            string response = reader.ReadLine();
+
             bool notIn = true;
             while (notIn)
             {
@@ -86,28 +115,6 @@ namespace ChatAppExamServer
                     writer.WriteLine("Invalid response. Try again: ");
                 }
                 response = reader.ReadLine();
-            }
-        }
-
-        public void HandleClient(StreamReader reader, StreamWriter writer, Socket clientSocket)
-        {
-            writer.WriteLine("~~~ Welcome To The Chat ~~~ type \"register\" to register or \"login\" to log in");
-
-            string response = reader.ReadLine();
-
-            try
-            {
-                RegisterLoginGetResponse(reader, writer, clientSocket, response);
-            }
-            catch (Exception ex)
-            {
-                writer.WriteLine(ex.Message);
-            }
-            finally
-            {
-                reader.Close();
-                writer.Close();
-                clientSocket.Close();
             }
         }
 
@@ -141,7 +148,7 @@ namespace ChatAppExamServer
                 if (numberRegex.IsMatch(password) && upperRegex.IsMatch(password) && lowerRegex.IsMatch(password))
                 {
                     writer.WriteLine("Success! Press enter to return to the menu");
-                    User user = new User(username, password);
+                    User user = new User(username, password, writer);
                     users.Add(username, user);
                     Valid = true;
                 }
@@ -191,7 +198,7 @@ namespace ChatAppExamServer
                 if (username == "stoplogin")
                 {
                     writer.WriteLine("Returning to the main menu...");
-                    RegisterLoginGetResponse(reader, writer, clientSocket, string.Empty);
+                    HandleClient(reader, writer, clientSocket);
                     return;
                 }
                 else if (!users.ContainsKey(username))
@@ -247,13 +254,56 @@ namespace ChatAppExamServer
             }
 
             writer.WriteLine("Login was successful!");
+            user.Writer = writer;
             onlineUsers[username] = user;
             UserSession(reader, writer, clientSocket, user);
         }
 
         public void UserSession(StreamReader reader, StreamWriter writer, Socket clientSocket, User user)
         {
-            writer.WriteLine("user session started");
+            writer.WriteLine("user session started, type \"exit\" to log out");
+
+            writer.WriteLine("To send a message, use the format: @username: message");
+
+            string message;
+            while ((message = reader.ReadLine()) != null)
+            {
+                if (message.ToLower() == "exit")
+                {
+                    writer.WriteLine("Logging out...");
+                    onlineUsers.Remove(user.Username);
+                    HandleClient(reader, writer, clientSocket);
+                    return;
+                }
+
+                if (message.StartsWith("@"))
+                {
+                    int separatorIndex = message.IndexOf(':');
+                    if (separatorIndex > 1)
+                    {
+                        string recipientUsername = message.Substring(1, separatorIndex - 1).Trim();
+                        string actualMessage = message.Substring(separatorIndex + 1).Trim();
+
+                        if (onlineUsers.ContainsKey(recipientUsername))
+                        {
+                            User recipient = onlineUsers[recipientUsername];
+                            recipient.Writer.WriteLine($"{user.Username}: {actualMessage}");
+                        }
+                        else {
+                            writer.WriteLine($"User {recipientUsername} is not online.");
+                        }
+                    }
+                    else
+                    {
+                        writer.WriteLine("Invalid message format. Use \"@username: message\"");
+                    }
+                }
+                else
+                {
+                    writer.WriteLine("Invalid message format. Use \"@username: message\"");
+                }
+            }
+
         }
     }
 }

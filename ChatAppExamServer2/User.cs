@@ -11,11 +11,14 @@ namespace ChatAppExamServer
         public string Username { get; set; }
         public string Password { get; set; }
         public Dictionary<string, User> Contacts { get; set; }
-        public User(string username, string password)
+
+        public StreamWriter Writer { get; set; }
+        public User(string username, string password, StreamWriter writer)
         {
             this.Username = username;
             this.Password = password;
             Contacts = new Dictionary<string, User>();
+            Writer = writer;
         }
     }
 }
