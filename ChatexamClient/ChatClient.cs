@@ -31,13 +31,16 @@ namespace ChatexamClient
 
         public void Start()
         {
-            form.UpdateChat(reader.ReadLine());
-            form.UpdateChat(reader.ReadLine());
-
-            while (true)
+            try
             {
-                string response = reader.ReadLine();
-                form.UpdateChat("Me: " + response);
+                while (true)
+                {
+                    UpdateChatFromReader();
+                }
+            }
+            catch(Exception ex)
+            {
+                form.Invoke(new Action(() => { form.UpdateChat("Connection failed: " + ex.Message);}));
             }
         }
 
@@ -61,13 +64,14 @@ namespace ChatexamClient
             string message = reader.ReadLine();
             if (message != null)
             {
-                form.Invoke(new Action(() => form.UpdateChat(message)));
+                form.Invoke(new Action(() => form.UpdateChat("Server: " + message)));
             }
         }
 
         public void SendMessage(string message)
         {
             writer.WriteLine(message);
+            form.Invoke(new Action(() => form.UpdateChat(message)));
         }
 
         public void Close()

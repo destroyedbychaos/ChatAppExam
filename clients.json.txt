@@ -1,0 +1,12 @@
+{
+  "usa": {
+    "Username": "usa",
+    "Password": "12345678Qw",
+    "Contacts": {}
+  },
+  "uss": {
+    "Username": "uss",
+    "Password": "87654321qW",
+    "Contacts": {}
+  }
+}

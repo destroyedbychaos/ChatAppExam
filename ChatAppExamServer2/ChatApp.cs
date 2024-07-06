@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
+﻿using System.Net.Sockets;
 using System.Net;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using System.Xml;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace ChatAppExamServer
 {
@@ -15,6 +13,7 @@ namespace ChatAppExamServer
         private Dictionary<string, User> users = new Dictionary<string, User>();
         private Dictionary<string, User> onlineUsers = new Dictionary<string, User>();
         private const int BUFFER_SIZE = 1024;
+        private string clientsFile = "C:\\Users\\hp\\source\\repos\\ChatAppExam\\clients.json.txt";
 
         public ChatApp(string ip, int port)
         {
@@ -22,6 +21,7 @@ namespace ChatAppExamServer
             IPEndPoint endpoint = new IPEndPoint(ipAddress, port);
             listenerSocket = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             listenerSocket.Bind(endpoint);
+            LoadClientsFromFile();
         }
 
         public void StartChat()
@@ -34,6 +34,41 @@ namespace ChatAppExamServer
                 Socket clientSocket = listenerSocket.Accept();
                 Thread clientThread = new Thread(() => HandleClient(clientSocket));
                 clientThread.Start();
+            }
+        }
+
+        private void SaveClientsToFile()
+        {
+            try
+            {
+                string jsonString = JsonSerializer.Serialize(users, new JsonSerializerOptions
+                {
+                    WriteIndented = true
+                });
+                File.WriteAllText(clientsFile, jsonString);
+                Console.WriteLine("Clients saved to file successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving clients to file: {ex.Message}");
+            }
+        }
+
+        private void LoadClientsFromFile()
+        {
+            try
+            {
+                string jsonString = File.ReadAllText(clientsFile);
+                users = JsonSerializer.Deserialize<Dictionary<string, User>>(jsonString);
+                Console.WriteLine("Client list loaded");
+            }
+            catch (FileNotFoundException)
+            {
+                Console.WriteLine("Clients file not found. Creating new list.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading clients from file: {ex.Message}");
             }
         }
 
@@ -100,12 +135,12 @@ namespace ChatAppExamServer
             while (notIn)
             {
 
-                if (response.ToLower() == "register")
+                if (response.ToLower().Contains("register"))
                 {
                     RegisterUser(reader, writer, clientSocket);
                     notIn = false;
                 }
-                else if (response.ToLower() == "login")
+                else if (response.ToLower().Contains("login"))
                 {
                     LoginUser(reader, writer, clientSocket);
                     notIn = false;
@@ -184,6 +219,7 @@ namespace ChatAppExamServer
                 password = reader.ReadLine();
             }
 
+            SaveClientsToFile();
             HandleClient(reader, writer, clientSocket);
         }
 
@@ -193,9 +229,11 @@ namespace ChatAppExamServer
             string username = reader.ReadLine();
             bool valid = false;
 
+            writer.WriteLine(users[username].ToString());
+
             while (!valid)
             {
-                if (username == "stoplogin")
+                if (username.Contains("stoplogin"))
                 {
                     writer.WriteLine("Returning to the main menu...");
                     HandleClient(reader, writer, clientSocket);
@@ -303,7 +341,6 @@ namespace ChatAppExamServer
                     writer.WriteLine("Invalid message format. Use \"@username: message\"");
                 }
             }
-
         }
     }
 }

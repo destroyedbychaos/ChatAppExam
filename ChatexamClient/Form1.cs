@@ -6,34 +6,55 @@ namespace ChatexamClient
         public Form1()
         {
             InitComponent();
+            this.Load += new EventHandler(Form1_Load);
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            client = new ChatClient("127.0.0.1", 50000, this);
-            client.Start();
+            try
+            {
+                this.client = new ChatClient("127.0.0.1", 50000, this);
+                MessageBox.Show("Client initialized successfully.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error initializing client: " + ex.Message);
+            }
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(textBox1.Text))
+            try
             {
-                string message = textBox1.Text.Trim();
-                client.SendMessage(message);
-                textBox1.Clear();
-                textBox1.Focus();
+                if(client == null)
+                {
+                    MessageBox.Show("No client initialized.");
+                }
+                if (!string.IsNullOrEmpty(textBox1.Text))
+                {
+                    string message = textBox1.Text.Trim();
+                    client.SendMessage(message);
+                    textBox1.Clear();
+                    textBox1.Focus();
+                }
             }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
         }
 
         public void UpdateChat(string message)
         {
-            //не могла розібратись чому не працює, це взяла з інтернету; все ще не працює але...
             if (richTextBox1.InvokeRequired)
             {
                 richTextBox1.Invoke(() => UpdateChat(message));
-                return;
+            }
+            else
+            {
+                richTextBox1.AppendText(message + Environment.NewLine);
             }
 
-            richTextBox1.AppendText(message + Environment.NewLine);
         }
     }
 }
