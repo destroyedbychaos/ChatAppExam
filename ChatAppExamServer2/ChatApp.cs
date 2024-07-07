@@ -14,6 +14,7 @@ namespace ChatAppExamServer
         private Dictionary<string, User> onlineUsers = new Dictionary<string, User>();
         private const int BUFFER_SIZE = 1024;
         private string clientsFile = "C:\\Users\\hp\\source\\repos\\ChatAppExam\\clients.json.txt";
+        private string fileDirectory = "C:\\Users\\hp\\source\\repos\\ChatAppExam";
 
         public ChatApp(string ip, int port)
         {
@@ -98,13 +99,6 @@ namespace ChatAppExamServer
             {
                 Console.WriteLine($"Unexpected error: {ex.Message}");
             }
-            finally
-            {
-                if (clientSocket.Connected)
-                {
-                    clientSocket.Close();
-                }
-            }
         }
 
         public void HandleClient(StreamReader reader, StreamWriter writer, Socket clientSocket)
@@ -118,12 +112,6 @@ namespace ChatAppExamServer
             catch (Exception ex)
             {
                 writer.WriteLine(ex.Message);
-            }
-            finally
-            {
-                reader.Close();
-                writer.Close();
-                clientSocket.Close();
             }
         }
 
@@ -150,6 +138,31 @@ namespace ChatAppExamServer
                     writer.WriteLine("Invalid response. Try again: ");
                 }
                 response = reader.ReadLine();
+            }
+        }
+
+        public void ReceiveFile(string fileName, int fileSize, StreamReader reader)
+        {
+            try
+            {
+                string savePath = Path.Combine(fileDirectory, fileName);
+                using (FileStream fileStream = new FileStream(savePath, FileMode.Create))
+                {
+                    byte[] buffer = new byte[BUFFER_SIZE];
+                    int bytesRead;
+                    int totalBytesRead = 0;
+
+                    while (totalBytesRead < fileSize && (bytesRead = reader.BaseStream.Read(buffer, 0, Math.Min(buffer.Length, fileSize - totalBytesRead))) > 0)
+                    {
+                        fileStream.Write(buffer, 0, bytesRead);
+                        totalBytesRead += bytesRead;
+                    }
+                }
+                Console.WriteLine($"File received: {fileName}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error receiving file {fileName}: {ex.Message}");
             }
         }
 
@@ -229,7 +242,6 @@ namespace ChatAppExamServer
             string username = reader.ReadLine();
             bool valid = false;
 
-            writer.WriteLine(users[username].ToString());
 
             while (!valid)
             {
@@ -306,15 +318,24 @@ namespace ChatAppExamServer
             string message;
             while ((message = reader.ReadLine()) != null)
             {
-                if (message.ToLower() == "exit")
+                if (message.ToLower().Contains("exit"))
                 {
                     writer.WriteLine("Logging out...");
                     onlineUsers.Remove(user.Username);
                     HandleClient(reader, writer, clientSocket);
                     return;
                 }
+                if (message.StartsWith("FILE:"))
+                {
+                    string[] parts = message.Split(':');
+                    string fileName = parts[1].Trim();
+                    int fileSize = int.Parse(parts[2].Trim());
 
-                if (message.StartsWith("@"))
+                    ReceiveFile(fileName, fileSize, reader);
+
+                    BroadcastMessage($"File received from {user.Username}: {fileName}");
+                }
+                else if (message.StartsWith("@"))
                 {
                     int separatorIndex = message.IndexOf(':');
                     if (separatorIndex > 1)
@@ -322,13 +343,15 @@ namespace ChatAppExamServer
                         string recipientUsername = message.Substring(1, separatorIndex - 1).Trim();
                         string actualMessage = message.Substring(separatorIndex + 1).Trim();
 
-                        if (onlineUsers.ContainsKey(recipientUsername))
+                        try
                         {
                             User recipient = onlineUsers[recipientUsername];
                             recipient.Writer.WriteLine($"{user.Username}: {actualMessage}");
                         }
-                        else {
+                        catch (Exception ex)
+                        {
                             writer.WriteLine($"User {recipientUsername} is not online.");
+                            Console.WriteLine(ex.Message);
                         }
                     }
                     else
@@ -340,6 +363,15 @@ namespace ChatAppExamServer
                 {
                     writer.WriteLine("Invalid message format. Use \"@username: message\"");
                 }
+            }
+        }
+
+
+        public void BroadcastMessage(string message)
+        {
+            foreach (var user in onlineUsers.Values)
+            {
+                user.Writer.WriteLine(message);
             }
         }
     }

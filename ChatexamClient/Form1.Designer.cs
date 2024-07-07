@@ -31,6 +31,7 @@
         {
             //більшу половину скопіювала з вебсайтів, щоб не витрачати більше часу на дизайн ніж на сам код
             this.button1 = new System.Windows.Forms.Button();
+            this.buttonSendFile = new System.Windows.Forms.Button();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.listBox1 = new System.Windows.Forms.ListBox();
@@ -43,6 +44,15 @@
             this.button1.Text = "Send";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
+
+            this.buttonSendFile = new System.Windows.Forms.Button();
+            this.buttonSendFile.Location = new System.Drawing.Point(750, 397);
+            this.buttonSendFile.Name = "buttonSendFile";
+            this.buttonSendFile.Size = new System.Drawing.Size(116, 49);
+            this.buttonSendFile.TabIndex = 1;
+            this.buttonSendFile.Text = "File";
+            this.buttonSendFile.UseVisualStyleBackColor = true;
+            this.buttonSendFile.Click += new System.EventHandler(this.buttonSendFile_Click);
 
             this.richTextBox1.Location = new System.Drawing.Point(79, 44);
             this.richTextBox1.Name = "richTextBox1";
@@ -73,8 +83,9 @@
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.button1);
+            this.Controls.Add(this.buttonSendFile);
             this.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.Font = new System.Drawing.Font("Sylfaen", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(161)));
+            this.Font = new System.Drawing.Font("Segoe UI", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.Name = "Form1";
             this.Text = "ChatExamClient";
@@ -87,6 +98,7 @@
         private TextBox textBox1;
         private ListBox listBox1;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private Button buttonSendFile;
     }
 
     #endregion

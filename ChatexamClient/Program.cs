@@ -14,7 +14,6 @@ namespace ChatexamClient
             Application.Run(new ChatexamClient.Form1());
             
             Form1 form = new Form1();
-            Application.Run(form);
         }
     }
 }

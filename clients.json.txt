@@ -8,5 +8,10 @@
     "Username": "uss",
     "Password": "87654321qW",
     "Contacts": {}
+  },
+  "valya": {
+    "Username": "valya",
+    "Password": "12051988Vv",
+    "Contacts": {}
   }
 }
