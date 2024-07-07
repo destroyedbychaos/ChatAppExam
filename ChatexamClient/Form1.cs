@@ -1,6 +1,3 @@
-using Microsoft.VisualBasic.ApplicationServices;
-using System.Windows.Forms;
-
 namespace ChatexamClient
 {
     public partial class Form1 : Form
@@ -16,8 +13,6 @@ namespace ChatexamClient
             openFileDialog.Title = "Select a File";
             openFileDialog.Filter = "All Files|*.*";
             openFileDialog.CheckFileExists = true;
-
-            buttonSendFile.Click += buttonSendFile_Click;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -40,6 +35,7 @@ namespace ChatexamClient
                 if (client == null)
                 {
                     MessageBox.Show("No client initialized.");
+                    return;
                 }
                 if (!string.IsNullOrEmpty(textBox1.Text))
                 {
@@ -80,8 +76,6 @@ namespace ChatexamClient
                 MessageBox.Show($"Error sending file: {ex.Message}");
             }
         }
-
-
         public void UpdateChat(string message)
         {
             if (richTextBox1.InvokeRequired)

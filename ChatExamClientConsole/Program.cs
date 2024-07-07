@@ -1,7 +1,4 @@
-﻿using System.Net.Sockets;
-using System.Net;
-
-namespace ChatExamClientConsole
+﻿namespace ChatExamClientConsole
 {
     internal class Program
     {

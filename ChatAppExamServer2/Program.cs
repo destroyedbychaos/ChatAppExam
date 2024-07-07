@@ -1,6 +1,4 @@
-﻿using System.Text.Json;
-
-namespace ChatAppExamServer
+﻿namespace ChatAppExamServer
 {
     internal class Program
     {

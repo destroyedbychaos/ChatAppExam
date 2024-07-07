@@ -1,29 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
+﻿using System.Net.Sockets;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ChatExamClientConsole
 {
     internal class ChatClient
     {
         private Socket clientSocket;
-        private StreamReader reader;
-        private StreamWriter writer;
-        private Thread receiveThread;
+        private readonly StreamReader reader;
+        private readonly StreamWriter writer;
+        private readonly Thread receiveThread;
 
         public ChatClient(string ip, int port)
         {
             IPAddress ipAddress = IPAddress.Parse(ip);
-            IPEndPoint endpoint = new IPEndPoint(ipAddress, port);
+            var endpoint = new IPEndPoint(ipAddress, port);
 
             clientSocket = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             clientSocket.Connect(endpoint);
 
-            NetworkStream stream = new NetworkStream(clientSocket);
+            var stream = new NetworkStream(clientSocket);
             reader = new StreamReader(stream);
             writer = new StreamWriter(stream)
             {
@@ -45,7 +40,7 @@ namespace ChatExamClientConsole
                     string input = Console.ReadLine();
                     writer.WriteLine(input);
 
-                    if (input.ToLower() == "exit")
+                    if (input?.ToLower() == "exit")
                     {
                         break;
                     }

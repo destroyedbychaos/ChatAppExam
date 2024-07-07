@@ -46,7 +46,7 @@
             this.button1.Click += new System.EventHandler(this.button1_Click);
 
             this.buttonSendFile = new System.Windows.Forms.Button();
-            this.buttonSendFile.Location = new System.Drawing.Point(750, 397);
+            this.buttonSendFile.Location = new System.Drawing.Point(730, 397);
             this.buttonSendFile.Name = "buttonSendFile";
             this.buttonSendFile.Size = new System.Drawing.Size(116, 49);
             this.buttonSendFile.TabIndex = 1;

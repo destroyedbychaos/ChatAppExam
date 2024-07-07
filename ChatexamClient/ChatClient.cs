@@ -1,7 +1,6 @@
 ﻿using System.Net.Sockets;
 using System.Net;
 using System.Diagnostics;
-using System.Windows.Forms.Design;
 
 namespace ChatexamClient
 {
