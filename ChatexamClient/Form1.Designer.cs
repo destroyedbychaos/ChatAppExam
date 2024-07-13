@@ -37,41 +37,41 @@
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
 
-            this.button1.Location = new System.Drawing.Point(596, 397);
+            this.button1.Location = new System.Drawing.Point(600, 590);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(116, 49);
+            this.button1.Size = new System.Drawing.Size(115, 60);
             this.button1.TabIndex = 0;
             this.button1.Text = "Send";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
 
             this.buttonSendFile = new System.Windows.Forms.Button();
-            this.buttonSendFile.Location = new System.Drawing.Point(730, 397);
+            this.buttonSendFile.Location = new System.Drawing.Point(730, 590);
             this.buttonSendFile.Name = "buttonSendFile";
-            this.buttonSendFile.Size = new System.Drawing.Size(116, 49);
+            this.buttonSendFile.Size = new System.Drawing.Size(115, 60);
             this.buttonSendFile.TabIndex = 1;
             this.buttonSendFile.Text = "File";
             this.buttonSendFile.UseVisualStyleBackColor = true;
             this.buttonSendFile.Click += new System.EventHandler(this.buttonSendFile_Click);
 
-            this.richTextBox1.Location = new System.Drawing.Point(79, 44);
+            this.richTextBox1.Location = new System.Drawing.Point(80, 45);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.Size = new System.Drawing.Size(633, 400);
+            this.richTextBox1.Size = new System.Drawing.Size(770, 500);
             this.richTextBox1.TabIndex = 1;
             this.richTextBox1.Text = "";
 
 
-            this.textBox1.Location = new System.Drawing.Point(79, 600);
+            this.textBox1.Location = new System.Drawing.Point(80, 600);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(511, 300);
+            this.textBox1.Size = new System.Drawing.Size(510, 300);
             this.textBox1.TabIndex = 2;
 
             this.listBox1.FormattingEnabled = true;
             this.listBox1.ItemHeight = 35;
-            this.listBox1.Location = new System.Drawing.Point(1000, 96);
+            this.listBox1.Location = new System.Drawing.Point(1000, 45);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(305, 144);
+            this.listBox1.Size = new System.Drawing.Size(370, 570);
             this.listBox1.TabIndex = 3;
 
 
