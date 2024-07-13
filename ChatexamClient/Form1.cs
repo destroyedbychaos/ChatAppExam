@@ -51,6 +51,7 @@ namespace ChatexamClient
             }
 
         }
+
         private void buttonSendFile_Click(object sender, EventArgs e)
         {
             try
@@ -76,6 +77,7 @@ namespace ChatexamClient
                 MessageBox.Show($"Error sending file: {ex.Message}");
             }
         }
+
         public void UpdateChat(string message)
         {
             if (richTextBox1.InvokeRequired)

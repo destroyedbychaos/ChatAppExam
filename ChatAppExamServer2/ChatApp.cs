@@ -364,7 +364,6 @@ namespace ChatAppExamServer
             }
         }
 
-
         public void BroadcastMessage(string message)
         {
             foreach (var user in onlineUsers.Values)

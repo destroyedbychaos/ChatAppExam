@@ -13,6 +13,7 @@ namespace ChatexamClient
         private Thread receiveThread;
         private const int BUFFER_SIZE = 1024;
         private string fileDirectory = "C:\\Users\\hp\\source\\repos\\ChatAppExam";
+
         public ChatClient(string ip, int port, Form1 form)
         {
             this.form = form;
@@ -110,6 +111,7 @@ namespace ChatexamClient
                writer.WriteLine($"Error sending file {fileName}: {ex.Message}");
             }
         }
+
         public void ReceiveFile(string message, StreamReader reader)
         {
             try
@@ -171,6 +173,7 @@ namespace ChatexamClient
                 Console.WriteLine($"Error receiving file: {ex.Message}");
             }
         }
+
         public void Close()
         {
             receiveThread?.Interrupt();
