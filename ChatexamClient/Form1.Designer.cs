@@ -57,19 +57,19 @@
             this.richTextBox1.Location = new System.Drawing.Point(79, 44);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.Size = new System.Drawing.Size(633, 334);
+            this.richTextBox1.Size = new System.Drawing.Size(633, 400);
             this.richTextBox1.TabIndex = 1;
             this.richTextBox1.Text = "";
 
 
-            this.textBox1.Location = new System.Drawing.Point(79, 403);
+            this.textBox1.Location = new System.Drawing.Point(79, 600);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(511, 43);
+            this.textBox1.Size = new System.Drawing.Size(511, 300);
             this.textBox1.TabIndex = 2;
 
             this.listBox1.FormattingEnabled = true;
             this.listBox1.ItemHeight = 35;
-            this.listBox1.Location = new System.Drawing.Point(807, 96);
+            this.listBox1.Location = new System.Drawing.Point(1000, 96);
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(305, 144);
             this.listBox1.TabIndex = 3;
