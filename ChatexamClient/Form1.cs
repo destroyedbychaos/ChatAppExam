@@ -90,5 +90,35 @@ namespace ChatexamClient
             }
 
         }
+
+        public void UpdateContacts(List<string> contacts)
+        {
+            try
+            {
+                if (listBox1.InvokeRequired)
+                {
+                    listBox1.Invoke(new Action(() =>
+                    {
+                        listBox1.Items.Clear();
+                        foreach (var contact in contacts)
+                        {
+                            listBox1.Items.Add(contact);
+                        }
+                    }));
+                }
+                else
+                {
+                    listBox1.Items.Clear();
+                    foreach (var contact in contacts)
+                    {
+                        listBox1.Items.Add(contact);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                UpdateChat($"Exception in UpdateContacts: {ex.Message}");
+            }
+        }
     }
 }

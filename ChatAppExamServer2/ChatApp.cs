@@ -304,6 +304,11 @@ namespace ChatAppExamServer
             writer.WriteLine("Login was successful!");
             user.Writer = writer;
             onlineUsers[username] = user;
+
+            var contacts = user.ContactUsernames;
+            string contactsJson = JsonSerializer.Serialize(contacts);
+            writer.WriteLine(contactsJson);
+
             UserSession(reader, writer, clientSocket, user);
         }
 

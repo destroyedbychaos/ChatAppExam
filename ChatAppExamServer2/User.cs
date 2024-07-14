@@ -8,7 +8,10 @@ namespace ChatAppExamServer
     {
         public string Username { get; set; }
         public string Password { get; set; }
-        public Dictionary<string, User> Contacts { get; set; }
+        public List<string> ContactUsernames { get; set; } = new List<string>();
+
+        [JsonIgnore]
+        public Dictionary<string, User> Contacts { get; set; } = new Dictionary<string, User>();
 
         [JsonIgnore]
         public StreamWriter Writer { get; set; }

@@ -2,16 +2,19 @@
   "usa": {
     "Username": "usa",
     "Password": "12345678Qw",
-    "Contacts": {}
+    "ContactUsernames": [
+      "uss",
+      "valya"
+    ]
   },
   "uss": {
     "Username": "uss",
     "Password": "87654321qW",
-    "Contacts": {}
+    "ContactUsernames": []
   },
   "valya": {
     "Username": "valya",
     "Password": "12051988Vv",
-    "Contacts": {}
+    "ContactUsernames": []
   }
 }

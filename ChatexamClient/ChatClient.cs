@@ -1,6 +1,7 @@
 ﻿using System.Net.Sockets;
 using System.Net;
 using System.Diagnostics;
+using System.Text.Json;
 
 namespace ChatexamClient
 {
@@ -13,6 +14,7 @@ namespace ChatexamClient
         private Thread receiveThread;
         private const int BUFFER_SIZE = 1024;
         private string fileDirectory = "C:\\Users\\hp\\source\\repos\\ChatAppExam";
+        private string username;
 
         public ChatClient(string ip, int port, Form1 form)
         {
@@ -31,6 +33,7 @@ namespace ChatexamClient
             receiveThread = new Thread(new ThreadStart(ReceiveMessages));
             receiveThread.IsBackground = true;
             receiveThread.Start();
+
         }
 
         public void Start()
@@ -60,6 +63,11 @@ namespace ChatexamClient
                         if (message.Contains("FILE:"))
                         {
                             ReceiveFile(message, reader);
+                        }
+                        if (message.StartsWith("[") && message.EndsWith("]"))
+                        {
+                            List<string> contacts = JsonSerializer.Deserialize<List<string>>(message);
+                            form.UpdateContacts(contacts);
                         }
                         else
                         {
