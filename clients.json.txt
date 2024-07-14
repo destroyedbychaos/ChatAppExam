@@ -4,13 +4,16 @@
     "Password": "12345678Qw",
     "ContactUsernames": [
       "uss",
-      "valya"
+      "valya",
+      "andrea"
     ]
   },
   "uss": {
     "Username": "uss",
     "Password": "87654321qW",
-    "ContactUsernames": []
+    "ContactUsernames": [
+      "usa"
+    ]
   },
   "valya": {
     "Username": "valya",
@@ -20,6 +23,16 @@
   "maria": {
     "Username": "maria",
     "Password": "87654321wQ",
+    "ContactUsernames": []
+  },
+  "andrea": {
+    "Username": "andrea",
+    "Password": "123456789Qw",
+    "ContactUsernames": []
+  },
+  "haaaa": {
+    "Username": "haaaa",
+    "Password": "12345678Qw",
     "ContactUsernames": []
   }
 }

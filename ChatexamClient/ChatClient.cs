@@ -2,7 +2,6 @@
 using System.Net;
 using System.Diagnostics;
 using System.Text.Json;
-using System.DirectoryServices;
 
 namespace ChatexamClient
 {

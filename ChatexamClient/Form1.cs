@@ -62,7 +62,7 @@ namespace ChatexamClient
         {
             try
             {
-                if (client == null)
+                if (client != null)
                 {
                     MessageBox.Show("No client initialized.");
                     return;
