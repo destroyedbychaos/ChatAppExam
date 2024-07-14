@@ -4,6 +4,7 @@ namespace ChatexamClient
     {
         private ChatClient client;
         private OpenFileDialog openFileDialog;
+        private string selectedContact;
         public Form1()
         {
             InitComponent();
@@ -36,6 +37,11 @@ namespace ChatexamClient
                 {
                     MessageBox.Show("No client initialized.");
                     return;
+                }
+                if (selectedContact != null)
+                {
+                    string message = richTextBox1.Text;
+                    client.SendMessage($"ROUTE:{selectedContact}:{message}");
                 }
                 if (!string.IsNullOrEmpty(textBox1.Text))
                 {
@@ -119,6 +125,28 @@ namespace ChatexamClient
             {
                 UpdateChat($"Exception in UpdateContacts: {ex.Message}");
             }
+        }
+
+        public void ClearRichTextBox()
+        {
+            if (InvokeRequired)
+            {
+                BeginInvoke((MethodInvoker)(() => ClearRichTextBox()));
+            }
+            else
+            {
+                richTextBox1.Clear();
+            }
+        }
+
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(listBox1.SelectedItem != null)
+            {
+                selectedContact = listBox1.SelectedItem.ToString();
+                client.SelectContact(selectedContact);
+            }
+
         }
     }
 }

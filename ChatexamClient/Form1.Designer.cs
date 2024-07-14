@@ -73,6 +73,8 @@
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(370, 570);
             this.listBox1.TabIndex = 3;
+            this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
+
 
 
             this.AutoScaleDimensions = new System.Drawing.SizeF(15F, 35F);

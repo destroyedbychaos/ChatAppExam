@@ -338,6 +338,14 @@ namespace ChatAppExamServer
 
                     BroadcastMessage($"File received from {user.Username}: {fileName}");
                 }
+                if (message.StartsWith("ROUTE:"))
+                {
+                    string[] parts = message.Split(":");
+                    string recepientUsername = parts[1].Trim();
+                    message = parts[2].Trim();
+
+                    RouteMessage(user.Username, recepientUsername, message);
+                }
                 else if (message.StartsWith("@"))
                 {
                     int separatorIndex = message.IndexOf(':');
@@ -357,15 +365,20 @@ namespace ChatAppExamServer
                             Console.WriteLine(ex.Message);
                         }
                     }
-                    else
-                    {
-                        writer.WriteLine("Invalid message format. Use \"@username: message\"");
-                    }
                 }
-                else
-                {
-                    writer.WriteLine("Invalid message format. Use \"@username: message\"");
-                }
+            }
+        }
+
+        public void RouteMessage(string senderUsername, string receiverUsername, string message)
+        {
+            if (onlineUsers.ContainsKey(receiverUsername))
+            {
+                var receiver = onlineUsers[receiverUsername];
+                receiver.Writer.WriteLine($"[{senderUsername}]: {message}");
+            }
+            else
+            {
+                Console.WriteLine($"User '{receiverUsername}' is not online.");
             }
         }
 

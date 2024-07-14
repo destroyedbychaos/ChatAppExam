@@ -2,6 +2,7 @@
 using System.Net;
 using System.Diagnostics;
 using System.Text.Json;
+using System.DirectoryServices;
 
 namespace ChatexamClient
 {
@@ -14,7 +15,7 @@ namespace ChatexamClient
         private Thread receiveThread;
         private const int BUFFER_SIZE = 1024;
         private string fileDirectory = "C:\\Users\\hp\\source\\repos\\ChatAppExam";
-        private string username;
+        string selectedContact;
 
         public ChatClient(string ip, int port, Form1 form)
         {
@@ -91,9 +92,23 @@ namespace ChatexamClient
             }
         }
 
+        public void SelectContact(string contactUsername)
+        {
+            selectedContact = contactUsername;
+            form.ClearRichTextBox();
+            form.UpdateChat($"Selected contact: {selectedContact}");
+        }
+
         public void SendMessage(string message)
         {
-            writer.WriteLine(message);
+            if(selectedContact != null)
+            {
+                writer.WriteLine("ROUTE:" + selectedContact + ":" + message);
+            }
+            else
+            {
+                writer.WriteLine(message);
+            }
             form.Invoke(new Action(() => form.UpdateChat("Me: " + message)));
         }
 
