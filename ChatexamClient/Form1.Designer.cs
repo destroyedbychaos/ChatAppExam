@@ -32,6 +32,7 @@
             //більшу половину скопіювала з вебсайтів, щоб не витрачати більше часу на дизайн ніж на сам код
             this.button1 = new System.Windows.Forms.Button();
             this.buttonSendFile = new System.Windows.Forms.Button();
+            this.buttonAddContact = new System.Windows.Forms.Button();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.listBox1 = new System.Windows.Forms.ListBox();
@@ -75,6 +76,12 @@
             this.listBox1.TabIndex = 3;
             this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
 
+            this.buttonAddContact.Name = "buttonAddContact";
+            this.buttonAddContact.Location = new System.Drawing.Point(1120, 650);
+            this.buttonAddContact.Size = new System.Drawing.Size(120, 40);
+            this.buttonAddContact.Text = "Add Contact";
+            this.buttonAddContact.UseVisualStyleBackColor = true;
+            this.buttonAddContact.Click += btnAddContact_Click;
 
 
             this.AutoScaleDimensions = new System.Drawing.SizeF(15F, 35F);
@@ -86,6 +93,7 @@
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.buttonSendFile);
+            this.Controls.Add(this.buttonAddContact);
             this.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Font = new System.Drawing.Font("Segoe UI", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
@@ -101,6 +109,7 @@
         private ListBox listBox1;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private Button buttonSendFile;
+        private Button buttonAddContact;
     }
 
     #endregion

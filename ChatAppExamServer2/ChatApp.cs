@@ -26,7 +26,7 @@ namespace ChatAppExamServer
         public void StartChat()
         {
             listenerSocket.Listen(10);
-            Console.WriteLine("chat started");
+            Console.WriteLine("Chat started");
 
             while (true)
             {
@@ -139,31 +139,6 @@ namespace ChatAppExamServer
             }
         }
 
-        public void ReceiveFile(string fileName, int fileSize, StreamReader reader)
-        {
-            try
-            {
-                string savePath = Path.Combine(fileDirectory, fileName);
-                using (FileStream fileStream = new FileStream(savePath, FileMode.Create))
-                {
-                    byte[] buffer = new byte[BUFFER_SIZE];
-                    int bytesRead;
-                    int totalBytesRead = 0;
-
-                    while (totalBytesRead < fileSize && (bytesRead = reader.BaseStream.Read(buffer, 0, Math.Min(buffer.Length, fileSize - totalBytesRead))) > 0)
-                    {
-                        fileStream.Write(buffer, 0, bytesRead);
-                        totalBytesRead += bytesRead;
-                    }
-                }
-                Console.WriteLine($"File received: {fileName}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error receiving file {fileName}: {ex.Message}");
-            }
-        }
-
         public void RegisterUser(StreamReader reader, StreamWriter writer, Socket clientSocket)
         {
             writer.WriteLine("Enter a username:");
@@ -238,10 +213,10 @@ namespace ChatAppExamServer
         {
             writer.WriteLine("Enter your username or enter \"stoplogin\" to exit to the menu:");
             string username = reader.ReadLine();
-            bool valid = false;
+            bool Valid = false;
 
 
-            while (!valid)
+            while (!Valid)
             {
                 if (username.Contains("stoplogin"))
                 {
@@ -256,16 +231,16 @@ namespace ChatAppExamServer
                 }
                 else
                 {
-                    valid = true;
+                    Valid = true;
                 }
             }
 
             writer.WriteLine("Enter your password:");
             string password = reader.ReadLine();
             User user = users[username];
-            valid = false;
+            Valid = false;
 
-            while (!valid)
+            while (!Valid)
             {
                 if (user.Password != password)
                 {
@@ -297,7 +272,7 @@ namespace ChatAppExamServer
                 }
                 else
                 {
-                    valid = true;
+                    Valid = true;
                 }
             }
 
@@ -314,14 +289,14 @@ namespace ChatAppExamServer
 
         public void UserSession(StreamReader reader, StreamWriter writer, Socket clientSocket, User user)
         {
-            writer.WriteLine("user session started, type \"exit\" to log out");
+            writer.WriteLine("User session started, type \"exit\" to log out");
 
             writer.WriteLine("To send a message, use the format: @username: message");
 
             string message;
             while ((message = reader.ReadLine()) != null)
             {
-                if (message.ToLower().Contains("exit"))
+                if (message.ToLower() == "exit")
                 {
                     writer.WriteLine("Logging out...");
                     onlineUsers.Remove(user.Username);
@@ -346,7 +321,14 @@ namespace ChatAppExamServer
 
                     RouteMessage(user.Username, recepientUsername, message);
                 }
-                else if (message.StartsWith("@"))
+                if (message.StartsWith("ADD_CONTACT:"))
+                {
+                    string[] parts = message.Split(':');
+                    string usernameToAdd = parts[1].Trim();
+
+                    AddContactForUser(usernameToAdd, user, writer);
+                }
+                if (message.StartsWith("@"))
                 {
                     int separatorIndex = message.IndexOf(':');
                     if (separatorIndex > 1)
@@ -366,6 +348,51 @@ namespace ChatAppExamServer
                         }
                     }
                 }
+            }
+        }
+
+        public void ReceiveFile(string fileName, int fileSize, StreamReader reader)
+        {
+            try
+            {
+                string savePath = Path.Combine(fileDirectory, fileName);
+                using (FileStream fileStream = new FileStream(savePath, FileMode.Create))
+                {
+                    byte[] buffer = new byte[BUFFER_SIZE];
+                    int bytesRead;
+                    int totalBytesRead = 0;
+
+                    while (totalBytesRead < fileSize && (bytesRead = reader.BaseStream.Read(buffer, 0, Math.Min(buffer.Length, fileSize - totalBytesRead))) > 0)
+                    {
+                        fileStream.Write(buffer, 0, bytesRead);
+                        totalBytesRead += bytesRead;
+                    }
+                }
+                Console.WriteLine($"File received: {fileName}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error receiving file {fileName}: {ex.Message}");
+            }
+        }
+
+        private void AddContactForUser(string username, User user, StreamWriter writer)
+        {
+            if(users.ContainsKey(username) && !user.ContactUsernames.Contains(username))
+            {
+                user.Contacts.Add(username, users[username]);
+                user.ContactUsernames.Add(username);
+                var contacts = user.ContactUsernames;
+                string contactsJson = JsonSerializer.Serialize(contacts);
+                writer.WriteLine(contactsJson);
+            }
+            else if(!users.ContainsKey(username))
+            {
+                writer.WriteLine($"The user {username} does not exist.");
+            }
+            else if(user.ContactUsernames.Contains(username))
+            {
+                writer.WriteLine($"The user {username} is already in your contacts.");
             }
         }
 

@@ -148,5 +148,26 @@ namespace ChatexamClient
             }
 
         }
+
+        private void btnAddContact_Click(object sender, EventArgs e)
+        {
+            string username = AskForUsername();
+
+            if (!string.IsNullOrEmpty(username))
+            {
+                AddContact(username);
+            }
+        }
+
+        private void AddContact(string username)
+        {
+            string message = $"ADD_CONTACT:{username}";
+            client.SendMessage(message);
+        }
+
+        private string AskForUsername()
+        {
+            return Microsoft.VisualBasic.Interaction.InputBox("Enter username of the contact to add:", "Add Contact", "");
+        }
     }
 }
