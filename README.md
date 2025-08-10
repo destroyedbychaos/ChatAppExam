@@ -1,13 +1,16 @@
+
 # ChatAppExam
+Created a network application that allows users to communicate with each other through messages.  
 
-Завдання проєкту 3: Створіть мережевий додаток, який дозволить користувачам спілкуватися між собою через повідомлення. 
-При першому використанні додатка користувач реєструється, а при наступних запусках користувач входить за створеним логіном і паролем.
-Користувач може надсилати запрошення для спілкування існуючому користувачеві, створювати свій список контактів, додавати, видаляти, перейменовувати контакти. 
-Користувачі можуть обмінюватися текстовими повідомленнями, картинками, файлами. 
-Користувач може організувати груповий чат. 
-Додаток має бути зі зручним користувацьким інтерфейсом.
+**Features**
+ - User registers an account, and on subsequent uses, the users log in with the created username and password
+ - Users can send chat invitations to existing users, create their own contact lists, and add, delete, or rename contacts
+ - Users can exchange text messages, images, and files
+ - Users can organize group chats 
 
-зміни на минулих двох:
-  перейшла на сокети з тсп, бо мені так зручніше
-  зробила дизайн чату на віндовс формах для одного користувача
-  додала консольну програмку для спілкування сервера з користувачем
+**Technologies**
+-   Backend: C#
+-  	Frontend: Windows Forms
+-   Sockets over TCP for convenience.
+-   Chat interface designed using Windows Forms for simplicity
+-   Console program enables communication between the server and users.
